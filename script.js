@@ -21,19 +21,31 @@ function resetGrid() {
   }
 }
 
-function coloringMode() {
+function coloringMode(color = "black") {
   const divList = document.querySelectorAll(".divs");
   divList.forEach(function (currentDiv) {
     currentDiv.addEventListener("mouseover", () => {
-      currentDiv.style.backgroundColor = "black";
+      if (color !== "black") {
+        const x = Math.floor(Math.random() * 255 + 1);
+        const y = Math.floor(Math.random() * 255 + 1);
+        const z = Math.floor(Math.random() * 255 + 1);
+
+        currentDiv.style.backgroundColor = "rgb(" + x + "," + y + "," + z + ")";
+      } else {
+        currentDiv.style.backgroundColor = "black";
+      }
     });
   });
 }
 createDivs();
 coloringMode();
 
-const button = document.querySelector(".btn_grid");
-button.addEventListener("click", () => {
+const buttonDimensions = document.querySelector(".btn_grid");
+const buttonBlackColor = document.querySelector(".btn_black");
+const buttonRGBColor = document.querySelector(".btn_random_rgb");
+const buttonReset = document.querySelector(".btn_reset");
+
+buttonDimensions.addEventListener("click", () => {
   let dimensions = prompt("how many divs you want");
   if (dimensions > 100 || dimensions < 2)
     alert("enter dimensions between 2 and 100");
@@ -41,4 +53,11 @@ button.addEventListener("click", () => {
     createDivs(dimensions);
     coloringMode();
   }
+});
+
+buttonBlackColor.addEventListener("click", () => coloringMode("black"));
+buttonRGBColor.addEventListener("click", () => coloringMode("RGB"));
+buttonReset.addEventListener("click", () => {
+  createDivs();
+  coloringMode();
 });
