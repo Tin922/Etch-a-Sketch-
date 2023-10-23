@@ -1,3 +1,5 @@
+let coloringEnabled = true;
+
 function createDivs(area = 16) {
   resetGrid();
 
@@ -14,6 +16,7 @@ function createDivs(area = 16) {
     div.style.width = squareDimensions + "px";
   });
 }
+
 function resetGrid() {
   const container = document.getElementById("container");
   while (container.firstChild) {
@@ -21,43 +24,68 @@ function resetGrid() {
   }
 }
 
-function coloringMode(color = "black") {
+function coloringMode(color) {
   const divList = document.querySelectorAll(".divs");
   divList.forEach(function (currentDiv) {
     currentDiv.addEventListener("mouseover", () => {
-      if (color !== "black") {
-        const x = Math.floor(Math.random() * 255 + 1);
-        const y = Math.floor(Math.random() * 255 + 1);
-        const z = Math.floor(Math.random() * 255 + 1);
+      if (coloringEnabled) {
+        if (color === "RGB") {
+          const x = Math.floor(Math.random() * 255 + 1);
+          const y = Math.floor(Math.random() * 255 + 1);
+          const z = Math.floor(Math.random() * 255 + 1);
 
-        currentDiv.style.backgroundColor = "rgb(" + x + "," + y + "," + z + ")";
-      } else {
-        currentDiv.style.backgroundColor = "black";
+          currentDiv.style.backgroundColor =
+            "rgb(" + x + "," + y + "," + z + ")";
+        } else if (color === "black") {
+          currentDiv.style.backgroundColor = "black";
+        } else if (color === "white") {
+          currentDiv.style.backgroundColor = "white";
+        }
       }
     });
   });
 }
+
+function toggleColoring() {
+  coloringEnabled = !coloringEnabled;
+}
+
 createDivs();
-coloringMode();
+coloringMode("black");
 
 const buttonDimensions = document.querySelector(".btn_grid");
 const buttonBlackColor = document.querySelector(".btn_black");
 const buttonRGBColor = document.querySelector(".btn_random_rgb");
 const buttonReset = document.querySelector(".btn_reset");
+const buttonEraser = document.querySelector(".btn_eraser");
 
 buttonDimensions.addEventListener("click", () => {
-  let dimensions = prompt("how many divs you want");
-  if (dimensions > 100 || dimensions < 2)
-    alert("enter dimensions between 2 and 100");
-  else {
+  let dimensions = prompt("How many divs do you want?");
+  if (dimensions > 100 || dimensions < 2) {
+    alert("Enter dimensions between 2 and 100");
+  } else {
     createDivs(dimensions);
-    coloringMode();
+    coloringMode("black");
   }
 });
 
-buttonBlackColor.addEventListener("click", () => coloringMode("black"));
-buttonRGBColor.addEventListener("click", () => coloringMode("RGB"));
+buttonBlackColor.addEventListener("click", () => {
+  coloringMode("black");
+});
+
+buttonRGBColor.addEventListener("click", () => {
+  coloringMode("RGB");
+});
+
+buttonEraser.addEventListener("click", () => {
+  coloringMode("white");
+});
+
 buttonReset.addEventListener("click", () => {
   createDivs();
-  coloringMode();
+  coloringMode("black");
+});
+
+document.querySelector("body").addEventListener("click", () => {
+  toggleColoring();
 });
